@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Student = require('../fold/model/student.js')
+const Book = require('../fold/model/books.js')
 const mongoose = require('mongoose')
 
 /*router.get('/',(req,res,next)=>{
@@ -11,11 +11,11 @@ const mongoose = require('mongoose')
     })
 }) */
 
-router.get('/',(req,res,next)=>{
- Student.find()
+ router.get('/',(req,res,next)=>{
+ Book.find()
  .then(result=>{
     res.status(200).json({
- studentData:result
+ Bookdata:result
  })
 })
 .catch(err=>{
@@ -24,14 +24,14 @@ router.get('/',(req,res,next)=>{
         error:err
     })
 })
-})
+})   
 
-router.get('/:id',(req,res,next)=>{
-    console.log(req.params.id);
-    Student.findById(req.params.id)
+router.get('/:Name',(req,res,next)=>{
+    console.log(req.params.Name);
+    Book.findOne(req.params.Name)
     .then(result=>{
        res.status(200).json({
-    student:result
+    Book:result
     })
    })
    .catch(err=>{
@@ -42,7 +42,7 @@ router.get('/:id',(req,res,next)=>{
    })
    })
 
-   router.delete('/:id',(req,res,next)=>{
+/*   router.delete('/:id',(req,res,next)=>{
     Student.remove({_id:req.params.id})
     .then(result=>{
        res.status(200).json({
@@ -56,24 +56,27 @@ router.get('/:id',(req,res,next)=>{
            error:err
        })
    })
-   })
+   })    */
 
 
 router.post('/',(req,res,next)=>{
-  const student = new Student({
-    _id: new mongoose.Types.ObjectId,
-    name:req.body.name,
-    email:req.body.email,
-    phone:req.body.phone,
-    gender:req.body.gender
+  const book = new Book({
+    id: req.body.id,
+    title:req.body.title,
+    title_ar:req.body.title_ar,
+    publication_year:req.body.publication_year,
+    publication_year_ar:req.body.publication_year_ar,
+    exhibitor_booth: req.body.exhibitor_booth,
+    exhibitor_booth_ar:req.body.exhibitor_booth_ar,
+    authors: [req.body.authors]
 
 
   })
-  student.save()
+  book.save()
   .then(result=>{
     console.log(result);
     res.status(200).json({
-        newStudent:result
+        newBook:result
     })
   })
   .catch(err=>{
@@ -86,7 +89,7 @@ router.post('/',(req,res,next)=>{
    
 })
 
-router.put('/:id',(req,res,next)=>{
+/* router.put('/:id',(req,res,next)=>{
     Student.findOneAndUpdate({_id:req.params.id},{
         $set:{
             name:req.body.name,
@@ -108,6 +111,6 @@ router.put('/:id',(req,res,next)=>{
            error:err
        })
    })
-   })
+   }) */
 
 module.exports = router;
